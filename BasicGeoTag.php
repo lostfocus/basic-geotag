@@ -93,7 +93,7 @@ class BasicGeoTag
                 marker.addTo(map);
             }
 
-            $(window).load(function () {
+            document.addEventListener('DOMContentLoaded', function () {
 
                 window.latform = document.getElementById('lat');
                 window.lngform = document.getElementById('lng');
