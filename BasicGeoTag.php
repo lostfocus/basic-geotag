@@ -1,9 +1,11 @@
 <?php
 /**
  * Plugin Name:       Basic GeoTag
+ * Plugin URI:        https://github.com/lostfocus/basic-geotag
  * Description:       Very basic functionalities to add geo tags to a blog post
  * Version:           0.1
- * Author:            <a href="http://dominikschwind.com/">Dominik Schwind</a>
+ * Author:            Dominik Schwind
+ * Author URI:        https://dominikschwind.com
  */
 
 class BasicGeoTag
@@ -133,8 +135,8 @@ class BasicGeoTag
     {
         if (isset($_POST['geo_latitude']) && isset($_POST['geo_longitude'])) {
             update_post_meta($post_id, self::POST_META_PUBLIC, 1);
-            update_post_meta($post_id, self::POST_META_LATITUDE, round((float)trim($_POST['geo_latitude']),5));
-            update_post_meta($post_id, self::POST_META_LONGITUDE, round((float)trim($_POST['geo_longitude']),5));
+            update_post_meta($post_id, self::POST_META_LATITUDE, round((float)trim($_POST['geo_latitude']), 5));
+            update_post_meta($post_id, self::POST_META_LONGITUDE, round((float)trim($_POST['geo_longitude']), 5));
         }
     }
 
