@@ -117,10 +117,13 @@ class BasicGeoTag
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(window.map);
 
-                var locationButton = document.getElementById('current_location');
-                locationButton.onclick = function () {
-                    console.log("huch");
+                setTimeout(function () {
+                    map.invalidateSize();
+                }, 0);
 
+                var locationButton = document.getElementById('current_location');
+
+                locationButton.onclick = function () {
                     navigator.geolocation.getCurrentPosition(updateGeoForm, handleGeoError, {enableHighAccuracy: true, maximumAge: 10000});
 
                     return false;
