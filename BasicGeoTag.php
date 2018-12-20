@@ -3,7 +3,7 @@
  * Plugin Name:       Basic GeoTag
  * Plugin URI:        https://github.com/lostfocus/basic-geotag
  * Description:       Very basic functionalities to add geo tags to a blog post
- * Version:           0.1
+ * Version:           1.0
  * Author:            Dominik Schwind
  * Author URI:        https://dominikschwind.com
  */
@@ -14,7 +14,7 @@ class BasicGeoTag
     const POST_META_LONGITUDE = 'geo_longitude';
     const POST_META_PUBLIC = 'geo_public';
 
-    var $version = "0.1";
+    var $version = "1.0";
 
 
     public function add_meta_box($post_type, $post)
@@ -117,10 +117,13 @@ class BasicGeoTag
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(window.map);
 
-                var locationButton = document.getElementById('current_location');
-                locationButton.onclick = function () {
-                    console.log("huch");
+                setTimeout(function () {
+                    map.invalidateSize();
+                }, 0);
 
+                var locationButton = document.getElementById('current_location');
+
+                locationButton.onclick = function () {
                     navigator.geolocation.getCurrentPosition(updateGeoForm, handleGeoError, {enableHighAccuracy: true, maximumAge: 10000});
 
                     return false;
