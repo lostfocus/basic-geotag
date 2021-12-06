@@ -10,11 +10,11 @@
 
 class BasicGeoTag
 {
-    const POST_META_LATITUDE = 'geo_latitude';
-    const POST_META_LONGITUDE = 'geo_longitude';
-    const POST_META_PUBLIC = 'geo_public';
+    protected const POST_META_LATITUDE = 'geo_latitude';
+    protected const POST_META_LONGITUDE = 'geo_longitude';
+    protected const POST_META_PUBLIC = 'geo_public';
 
-    var $version = "1.0";
+    protected const VERSION = '1.0.0';
 
     public function add_meta_box($post_type, $post)
     {
@@ -35,8 +35,8 @@ class BasicGeoTag
         wp_enqueue_script('leaflet-js', plugins_url('vendor/leaflet/js/leaflet.js', __FILE__), [], '1.3.4');
         wp_enqueue_style('leaflet-css', plugins_url('vendor/leaflet/css/leaflet.css', __FILE__), [], '1.3.4');
 
-        wp_enqueue_script('basic_geotag-js', plugins_url('js/basic-geotag.js', __FILE__), [], '1.0.0');
-        wp_enqueue_style('basic_geotag-css', plugins_url('css/basic-geotag.css', __FILE__), [], '1.0.0');
+        wp_enqueue_script('basic_geotag-js', plugins_url('js/basic-geotag.js', __FILE__), [], self::VERSION);
+        wp_enqueue_style('basic_geotag-css', plugins_url('css/basic-geotag.css', __FILE__), [], self::VERSION);
         ?>
         <table class="form-table form-table-vertical">
             <tr>
@@ -62,10 +62,10 @@ class BasicGeoTag
 
     public function save_meta_box_content($post_id, $post)
     {
-        if (isset($_POST['geo_latitude']) && isset($_POST['geo_longitude'])) {
+        if (isset($_POST[self::POST_META_LATITUDE]) && isset($_POST[self::POST_META_LONGITUDE])) {
             update_post_meta($post_id, self::POST_META_PUBLIC, 1);
-            update_post_meta($post_id, self::POST_META_LATITUDE, round((float)trim($_POST['geo_latitude']), 5));
-            update_post_meta($post_id, self::POST_META_LONGITUDE, round((float)trim($_POST['geo_longitude']), 5));
+            update_post_meta($post_id, self::POST_META_LATITUDE, round((float)trim($_POST[self::POST_META_LATITUDE]), 5));
+            update_post_meta($post_id, self::POST_META_LONGITUDE, round((float)trim($_POST[self::POST_META_LONGITUDE]), 5));
         }
     }
 
