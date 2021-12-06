@@ -3,7 +3,7 @@
  * Plugin Name:       Basic GeoTag
  * Plugin URI:        https://github.com/lostfocus/basic-geotag
  * Description:       Very basic functionalities to add geo tags to a blog post
- * Version:           1.0
+ * Version:           1.0.0
  * Author:            Dominik Schwind
  * Author URI:        https://dominikschwind.com
  */
