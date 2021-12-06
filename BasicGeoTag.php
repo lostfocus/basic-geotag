@@ -35,6 +35,8 @@ class BasicGeoTag
 
         wp_enqueue_script('leaflet-js', plugins_url('vendor/leaflet/js/leaflet.js', __FILE__), [], '1.3.4');
         wp_enqueue_style('leaflet-css', plugins_url('vendor/leaflet/css/leaflet.css', __FILE__), [], '1.3.4');
+
+        wp_enqueue_script('basic_geotag-js', plugins_url('js/basic-geotag.js', __FILE__), [], '1.0.0');
         ?>
         <table style="float:left;">
             <tr style="text-align:left;">
@@ -50,87 +52,12 @@ class BasicGeoTag
                     <input type="text" name="geo_longitude" id="lng" size="10" style="width:10em;" value="<?php echo $lng; ?>"/>&nbsp;&nbsp;&nbsp;
                 </td>
                 <td>
-                    <input type="button" id="current_location" onclick="return false" value="Current Location" class="button"/>
+                    <input type="button" id="current_location" value="Current Location" class="button"/>
                 </td>
             </tr>
         </table>
         <br style="clear:both;"/>
         <div id="basicgeotagmap" style="height: 400px; width: 100%; padding: 0px; margin: 0px; position: relative; overflow: hidden;"></div>
-        <script>
-            function updateGeoForm(position) {
-                console.log(position);
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
-
-                map.setView([lat, lng], 17);
-                map.eachLayer(function (layer) {
-                    layer.setOpacity(1);
-                });
-                setMarker(lat, lng);
-                latform.value = lat;
-                lngform.value = lng;
-            }
-
-            function handleGeoError(error) {
-                console.log(error);
-            }
-
-            function setMarker(lat, lng) {
-                window.marker = L.marker([lat, lng]);
-
-                marker.options.draggable = true;
-
-
-                marker.on("drag", function (e) {
-                    var marker = e.target;
-                    var markerposition = marker.getLatLng();
-                    map.panTo(new L.LatLng(markerposition.lat, markerposition.lng));
-                    latform.value = markerposition.lat;
-                    lngform.value = markerposition.lng;
-                });
-                marker.on("dragend", function (e) {
-                    var ll = marker.getLatLng();
-                });
-
-                marker.addTo(map);
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-
-                window.latform = document.getElementById('lat');
-                window.lngform = document.getElementById('lng');
-
-                var lat = latform.value;
-                var lng = lngform.value;
-
-                if (lat === '') lat = 51.5194133;
-                if (lng === '') lng = -0.1291453;
-
-                window.map = L.map('basicgeotagmap').setView([lat, lng], 8);
-
-                <?php if($lat != '' && $lng != ''): ?>
-                map.setView([lat, lng], 17);
-                setMarker(lat, lng);
-                <?php endif; ?>
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(window.map);
-
-                setTimeout(function () {
-                    map.invalidateSize();
-                }, 0);
-
-                var locationButton = document.getElementById('current_location');
-
-                locationButton.onclick = function () {
-                    navigator.geolocation.getCurrentPosition(updateGeoForm, handleGeoError, {enableHighAccuracy: true, maximumAge: 10000});
-
-                    return false;
-                }
-
-            });
-        </script>
         <?php
     }
 
