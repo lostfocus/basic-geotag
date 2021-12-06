@@ -33,8 +33,8 @@ class BasicGeoTag
         $lat = get_post_meta($post->ID, self::POST_META_LATITUDE, true);
         $lng = get_post_meta($post->ID, self::POST_META_LONGITUDE, true);
 
-        wp_enqueue_script('leaflet-js', plugins_url('js/leaflet.js', __FILE__), [], '1.3.4');
-        wp_enqueue_style('leaflet-css', plugins_url('css/leaflet.css', __FILE__), [], '1.3.4');
+        wp_enqueue_script('leaflet-js', plugins_url('vendor/leaflet/js/leaflet.js', __FILE__), [], '1.3.4');
+        wp_enqueue_style('leaflet-css', plugins_url('vendor/leaflet/css/leaflet.css', __FILE__), [], '1.3.4');
         ?>
         <table style="float:left;">
             <tr style="text-align:left;">
