@@ -3,19 +3,18 @@
  * Plugin Name:       Basic GeoTag
  * Plugin URI:        https://github.com/lostfocus/basic-geotag
  * Description:       Very basic functionalities to add geo tags to a blog post
- * Version:           1.0
+ * Version:           1.0.0
  * Author:            Dominik Schwind
  * Author URI:        https://dominikschwind.com
  */
 
 class BasicGeoTag
 {
-    const POST_META_LATITUDE = 'geo_latitude';
-    const POST_META_LONGITUDE = 'geo_longitude';
-    const POST_META_PUBLIC = 'geo_public';
+    protected const POST_META_LATITUDE = 'geo_latitude';
+    protected const POST_META_LONGITUDE = 'geo_longitude';
+    protected const POST_META_PUBLIC = 'geo_public';
 
-    var $version = "1.0";
-
+    protected const VERSION = '1.0.0';
 
     public function add_meta_box($post_type, $post)
     {
@@ -33,113 +32,40 @@ class BasicGeoTag
         $lat = get_post_meta($post->ID, self::POST_META_LATITUDE, true);
         $lng = get_post_meta($post->ID, self::POST_META_LONGITUDE, true);
 
-        wp_enqueue_script('leaflet-js', plugins_url('js/leaflet.js', __FILE__), [], '1.3.4');
-        wp_enqueue_style('leaflet-css', plugins_url('css/leaflet.css', __FILE__), [], '1.3.4');
+        wp_enqueue_script('leaflet-js', plugins_url('vendor/leaflet/js/leaflet.js', __FILE__), [], '1.3.4');
+        wp_enqueue_style('leaflet-css', plugins_url('vendor/leaflet/css/leaflet.css', __FILE__), [], '1.3.4');
+
+        wp_enqueue_script('basic_geotag-js', plugins_url('js/basic-geotag.js', __FILE__), [], self::VERSION);
+        wp_enqueue_style('basic_geotag-css', plugins_url('css/basic-geotag.css', __FILE__), [], self::VERSION);
         ?>
-        <table style="float:left;">
-            <tr style="text-align:left;">
+        <table class="form-table form-table-vertical">
+            <tr>
                 <th>Latitude</th>
                 <th>Longitude</th>
                 <th></th>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="geo_latitude" id="lat" size="10" style="width:10em;" value="<?php echo $lat; ?>"/>
+                    <input type="text" name="<?php echo self::POST_META_LATITUDE; ?>" id="lat" size="10" value="<?php echo $lat; ?>" class="medium-text"/>
                 </td>
                 <td>
-                    <input type="text" name="geo_longitude" id="lng" size="10" style="width:10em;" value="<?php echo $lng; ?>"/>&nbsp;&nbsp;&nbsp;
+                    <input type="text" name="<?php echo self::POST_META_LONGITUDE; ?>" id="lng" size="10" value="<?php echo $lng; ?>" class="medium-text"/>
                 </td>
                 <td>
-                    <input type="button" id="current_location" onclick="return false" value="Current Location" class="button"/>
+                    <button id="current_location" class="button">Get current location</button>
                 </td>
             </tr>
         </table>
-        <br style="clear:both;"/>
-        <div id="basicgeotagmap" style="height: 400px; width: 100%; padding: 0px; margin: 0px; position: relative; overflow: hidden;"></div>
-        <script>
-            function updateGeoForm(position) {
-                console.log(position);
-                var lat = position.coords.latitude;
-                var lng = position.coords.longitude;
-
-                map.setView([lat, lng], 17);
-                map.eachLayer(function (layer) {
-                    layer.setOpacity(1);
-                });
-                setMarker(lat, lng);
-                latform.value = lat;
-                lngform.value = lng;
-            }
-
-            function handleGeoError(error) {
-                console.log(error);
-            }
-
-            function setMarker(lat, lng) {
-                window.marker = L.marker([lat, lng]);
-
-                marker.options.draggable = true;
-
-
-                marker.on("drag", function (e) {
-                    var marker = e.target;
-                    var markerposition = marker.getLatLng();
-                    map.panTo(new L.LatLng(markerposition.lat, markerposition.lng));
-                    latform.value = markerposition.lat;
-                    lngform.value = markerposition.lng;
-                });
-                marker.on("dragend", function (e) {
-                    var ll = marker.getLatLng();
-                });
-
-                marker.addTo(map);
-            }
-
-            document.addEventListener('DOMContentLoaded', function () {
-
-                window.latform = document.getElementById('lat');
-                window.lngform = document.getElementById('lng');
-
-                var lat = latform.value;
-                var lng = lngform.value;
-
-                if (lat === '') lat = 51.5194133;
-                if (lng === '') lng = -0.1291453;
-
-                window.map = L.map('basicgeotagmap').setView([lat, lng], 8);
-
-                <?php if($lat != '' && $lng != ''): ?>
-                map.setView([lat, lng], 17);
-                setMarker(lat, lng);
-                <?php endif; ?>
-
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                }).addTo(window.map);
-
-                setTimeout(function () {
-                    map.invalidateSize();
-                }, 0);
-
-                var locationButton = document.getElementById('current_location');
-
-                locationButton.onclick = function () {
-                    navigator.geolocation.getCurrentPosition(updateGeoForm, handleGeoError, {enableHighAccuracy: true, maximumAge: 10000});
-
-                    return false;
-                }
-
-            });
-        </script>
+        <div id="basicgeotagmap"></div>
         <?php
     }
 
     public function save_meta_box_content($post_id, $post)
     {
-        if (isset($_POST['geo_latitude']) && isset($_POST['geo_longitude'])) {
+        if (isset($_POST[self::POST_META_LATITUDE]) && isset($_POST[self::POST_META_LONGITUDE])) {
             update_post_meta($post_id, self::POST_META_PUBLIC, 1);
-            update_post_meta($post_id, self::POST_META_LATITUDE, round((float)trim($_POST['geo_latitude']), 5));
-            update_post_meta($post_id, self::POST_META_LONGITUDE, round((float)trim($_POST['geo_longitude']), 5));
+            update_post_meta($post_id, self::POST_META_LATITUDE, round((float)trim($_POST[self::POST_META_LATITUDE]), 5));
+            update_post_meta($post_id, self::POST_META_LONGITUDE, round((float)trim($_POST[self::POST_META_LONGITUDE]), 5));
         }
     }
 
