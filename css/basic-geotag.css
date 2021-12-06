@@ -1,0 +1,27 @@
+.form-table.form-table-vertical {
+  width: auto;
+}
+
+.form-table.form-table-vertical th {
+  padding-top: 0;
+  padding-bottom: 0;
+  width: auto;
+}
+
+.form-table.form-table-vertical td {
+  padding-top: 5px;
+  padding-left: 0;
+}
+
+input.medium-text {
+  width: 10em;
+}
+
+#basicgeotagmap {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+}

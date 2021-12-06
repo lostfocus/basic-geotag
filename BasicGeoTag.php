@@ -16,7 +16,6 @@ class BasicGeoTag
 
     var $version = "1.0";
 
-
     public function add_meta_box($post_type, $post)
     {
         add_meta_box(
@@ -37,27 +36,27 @@ class BasicGeoTag
         wp_enqueue_style('leaflet-css', plugins_url('vendor/leaflet/css/leaflet.css', __FILE__), [], '1.3.4');
 
         wp_enqueue_script('basic_geotag-js', plugins_url('js/basic-geotag.js', __FILE__), [], '1.0.0');
+        wp_enqueue_style('basic_geotag-css', plugins_url('css/basic-geotag.css', __FILE__), [], '1.0.0');
         ?>
-        <table style="float:left;">
-            <tr style="text-align:left;">
+        <table class="form-table form-table-vertical">
+            <tr>
                 <th>Latitude</th>
                 <th>Longitude</th>
                 <th></th>
             </tr>
             <tr>
                 <td>
-                    <input type="text" name="geo_latitude" id="lat" size="10" style="width:10em;" value="<?php echo $lat; ?>"/>
+                    <input type="text" name="<?php echo self::POST_META_LATITUDE; ?>" id="lat" size="10" value="<?php echo $lat; ?>" class="medium-text"/>
                 </td>
                 <td>
-                    <input type="text" name="geo_longitude" id="lng" size="10" style="width:10em;" value="<?php echo $lng; ?>"/>&nbsp;&nbsp;&nbsp;
+                    <input type="text" name="<?php echo self::POST_META_LONGITUDE; ?>" id="lng" size="10" value="<?php echo $lng; ?>" class="medium-text"/>
                 </td>
                 <td>
-                    <input type="button" id="current_location" value="Current Location" class="button"/>
+                    <button id="current_location" class="button">Get current location</button>
                 </td>
             </tr>
         </table>
-        <br style="clear:both;"/>
-        <div id="basicgeotagmap" style="height: 400px; width: 100%; padding: 0px; margin: 0px; position: relative; overflow: hidden;"></div>
+        <div id="basicgeotagmap"></div>
         <?php
     }
 
